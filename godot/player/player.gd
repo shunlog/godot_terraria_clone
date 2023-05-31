@@ -4,39 +4,37 @@ extends CharacterBody2D
 var reachable_distance := 10
 
 
-func _surrounding_tiles(cell):
-	var neighb = []
-	for c in tilemap.get_surrounding_cells(cell):
-		if tilemap.get_cell_source_id(1, c) != -1:
-			neighb.append(c)
-	return neighb
+func _break_tile(cellv):
+	tilemap.set_cells_terrain_connect(0, [cellv], 0, 0, false)
 
-func _cells_to_update(cell):
-	var a1 = _surrounding_tiles(cell)
-	var a2 = []
-	for c in a1:
-		a2 += _surrounding_tiles(c)
-		
-	print(cell, a2)
-	return a2
 
-func _tile_clicked(pos):
+func _place_tile(cellv):
+	tilemap.set_cells_terrain_connect(0, [cellv], 0, -1, false)
+
+
+func _tile_clicked(pos, right_click=false):
 	if not tilemap:
 		return
 		
-	var tpos = tilemap.local_to_map(pos)
-	var tself = tilemap.local_to_map(position)
-	if abs(tpos.x - tself.x) + abs(tpos.y - tself.y) > reachable_distance:
+	var cellv = tilemap.local_to_map(pos)
+	var pos_cellv = tilemap.local_to_map(position)
+	if abs(cellv.x - pos_cellv.x) + abs(cellv.y - pos_cellv.y) > reachable_distance:
 		return
 		
-	tilemap.set_cell(1, tpos, 4, Vector2(2, 0))
-	tilemap.set_cells_terrain_connect(1, tilemap.get_used_cells(1), 0, 3, false)
+	if !right_click:
+		_break_tile(cellv)
+	else:
+		_place_tile(cellv)
+
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var pos = get_global_mouse_position()
-			_tile_clicked(pos)
+	if event is InputEventMouseButton and event.pressed:
+		var mpos = get_global_mouse_position()
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_tile_clicked(mpos, false)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_tile_clicked(mpos, true)
+		
 
 
 # BASIC MOVEMENT VARAIABLES ---------------- #
