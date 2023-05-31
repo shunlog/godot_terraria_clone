@@ -1,39 +1,12 @@
 extends CharacterBody2D
 
-@export var tilemap : TileMap
-var reachable_distance := 10
-
-
-func _break_tile(cellv):
-	tilemap.set_cells_terrain_connect(0, [cellv], 0, 0, false)
-
-
-func _place_tile(cellv):
-	tilemap.set_cells_terrain_connect(0, [cellv], 0, -1, false)
-
-
-func _tile_clicked(pos, right_click=false):
-	if not tilemap:
-		return
-		
-	var cellv = tilemap.local_to_map(pos)
-	var pos_cellv = tilemap.local_to_map(position)
-	if Utils.manhattan(cellv, pos_cellv) > reachable_distance:
-		return
-		
-	if !right_click:
-		_break_tile(cellv)
-	else:
-		_place_tile(cellv)
-
+@export var inventory : Node
 
 func _input(event):
-	if event is InputEventMouseButton and event.pressed:
-		var mpos = get_global_mouse_position()
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			_tile_clicked(mpos, false)
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			_tile_clicked(mpos, true)
+	if inventory:
+		if event is InputEventMouseButton and event.pressed:
+			var click_pos = get_global_mouse_position()
+			inventory.clicked(click_pos, position, event.button_index)
 		
 
 
