@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://player/player.gd" id="1_mbh66"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pkewn"]
-size = Vector2(60, 56)
+size = Vector2(80, 116)
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_4oauj"]
 length = 66.0
@@ -16,14 +16,14 @@ script = ExtResource("1_mbh66")
 
 [node name="Polygon2D" type="Polygon2D" parent="Sprite"]
 color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(-30, -60, 30, -60, 30, 60, -30, 60)
+polygon = PackedVector2Array(-40, -120, 40, -120, 40, 60, -40, 60)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -32)
+position = Vector2(0, -62)
 shape = SubResource("RectangleShape2D_pkewn")
 
 [node name="RayCollisionShape1" type="CollisionShape2D" parent="."]
-position = Vector2(-29, -6)
+position = Vector2(-39, -6)
 shape = SubResource("SeparationRayShape2D_4oauj")
 
 [node name="RayCollisionShape2" type="CollisionShape2D" parent="."]
@@ -31,5 +31,5 @@ position = Vector2(0, -6)
 shape = SubResource("SeparationRayShape2D_4oauj")
 
 [node name="RayCollisionShape3" type="CollisionShape2D" parent="."]
-position = Vector2(29, -6)
+position = Vector2(39, -6)
 shape = SubResource("SeparationRayShape2D_4oauj")
