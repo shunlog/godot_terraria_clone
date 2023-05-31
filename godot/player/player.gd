@@ -18,7 +18,7 @@ func _tile_clicked(pos, right_click=false):
 		
 	var cellv = tilemap.local_to_map(pos)
 	var pos_cellv = tilemap.local_to_map(position)
-	if abs(cellv.x - pos_cellv.x) + abs(cellv.y - pos_cellv.y) > reachable_distance:
+	if Utils.manhattan(cellv, pos_cellv) > reachable_distance:
 		return
 		
 	if !right_click:
