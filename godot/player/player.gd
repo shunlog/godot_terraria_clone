@@ -1,5 +1,37 @@
 extends CharacterBody2D
 
+@export var tilemap : TileMap
+var reachable_distance := 10
+
+
+func _surrounding_tiles(cell):
+	var neighb = []
+	for c in tilemap.get_surrounding_cells(cell):
+		if tilemap.get_cell_source_id(1, c) != -1:
+			neighb.append(c)
+	return neighb
+
+func _cells_to_update(cell):
+	var a1 = _surrounding_tiles(cell)
+	var a2 = []
+	for c in a1:
+		a2 += _surrounding_tiles(c)
+		
+	print(cell, a2)
+	return a2
+
+func _tile_clicked(pos):
+	if not tilemap:
+		return
+		
+	var tpos = tilemap.local_to_map(pos)
+	var tself = tilemap.local_to_map(position)
+	if abs(tpos.x - tself.x) + abs(tpos.y - tself.y) > reachable_distance:
+		return
+		
+	tilemap.set_cell(1, tpos, 4, Vector2(2, 0))
+	tilemap.set_cells_terrain_connect(1, tilemap.get_used_cells(1), 0, 3, false)
+
 @export var inventory : Node
 
 func _input(event):
@@ -7,8 +39,6 @@ func _input(event):
 		if event is InputEventMouseButton and event.pressed:
 			var click_pos = get_global_mouse_position()
 			inventory.clicked(click_pos, position, event.button_index)
-		
-
 
 # BASIC MOVEMENT VARAIABLES ---------------- #
 var face_direction := 1
